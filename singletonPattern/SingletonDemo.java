@@ -11,5 +11,6 @@ public class SingletonDemo {
         } else {
             System.out.println("Different instances created");
         }
+        
     }
 }
