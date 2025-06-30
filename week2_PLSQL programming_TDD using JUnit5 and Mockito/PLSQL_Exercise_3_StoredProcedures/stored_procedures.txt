@@ -1,0 +1,49 @@
+-- Use your database
+USE cognizant;
+
+-- Step 1: Create employees table
+CREATE TABLE IF NOT EXISTS employees (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    salary INT
+);
+
+-- Step 2: Insert sample employee data
+INSERT INTO employees VALUES (101, 'John', 50000);
+INSERT INTO employees VALUES (102, 'Jane', 60000);
+
+-- Step 3: Drop existing procedure if exists (optional safety)
+DROP PROCEDURE IF EXISTS increase_salary;
+
+-- Step 4: Create the procedure
+DELIMITER //
+
+CREATE PROCEDURE increase_salary (
+    IN p_emp_id INT,
+    IN p_percent DECIMAL(5,2)
+)
+BEGIN
+    DECLARE v_old_salary INT;
+    DECLARE v_new_salary INT;
+
+    SELECT salary INTO v_old_salary
+    FROM employees
+    WHERE emp_id = p_emp_id;
+
+    SET v_new_salary = v_old_salary + (v_old_salary * p_percent / 100);
+
+    UPDATE employees
+    SET salary = v_new_salary
+    WHERE emp_id = p_emp_id;
+
+    SELECT CONCAT('Updated Salary: ', v_new_salary) AS message;
+END;
+//
+
+DELIMITER ;
+
+-- Step 5: Call the procedure
+CALL increase_salary(101, 10);
+
+-- Step 6: View updated data
+SELECT * FROM employees;

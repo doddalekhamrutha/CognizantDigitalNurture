@@ -24,6 +24,7 @@ public class ProductCatalog {
                 result.add(product);
             }
         }
+
         return result;
     }
 }
